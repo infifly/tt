@@ -1,6 +1,6 @@
 简单php框架
 
-　简单，０学习成功．
+简单，０学习成本．
 
 composer.json 如下
 
@@ -23,3 +23,4 @@ composer.json 如下
   &nbsp;&nbsp;&nbsp;&nbsp;]<br />
   }<br />
 </p>
+
