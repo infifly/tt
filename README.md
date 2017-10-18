@@ -24,3 +24,76 @@ composer.json 如下
   }<br />
 </p>
 
+
+目录结构
+
+/configs/
+/runtime/
+/tt/
+|---controllers
+	|--	LayoutController.php
+	views
+		|--layout
+			|--index.php
+	models
+/web/
+    |--assets
+		|--images
+		|--css
+	.htaccess
+	index.php
+/vendor/
+composer.json
+
+配置文件
+/configs/pub.php
+<?php
+ return [
+    "appname"=>"tt",
+    "env"=>"test" //prod, test,
+ ];
+?>
+
+/configs/web.php
+
+<?php
+$cfg=include("pub.php");
+$cfg['defaultlayout']="app\controllers\Layout.index";
+$cfg['404page']="app\controllers\Layout.show404";
+return $cfg;
+?>
+
+
+输出调试信息到页面 : \TT::setDebugMessage("xxxxx");
+
+代码示例：
+控制器:
+<?php
+namespace app\controllers;
+use TT\web\Controller;
+class TestController extends Controller{
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function indexAction(){
+		\TT::setDebugMessage("test");
+        return $this->render("index",['name'=>'infi']);
+    }
+}
+?>
+模板：
+1:/views/layout/index.php:
+
+<html>
+<head>
+<?=$this->getContent()?>
+</head>
+<body>
+</html>
+
+2:/views/test/index.php
+<?=$name?>
+
