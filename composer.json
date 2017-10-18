@@ -1,0 +1,26 @@
+{
+    "name": "infifly/tt",
+    "description": "My first Simple Php Framework ",
+    "authors": [
+      {
+        "name": "infifly",
+        "email": "50398712@qq.com"
+      }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+    	"php": ">=5.4.0",
+        "maximebf/debugbar":"*",
+        "joshcam/mysqli-database-class":"dev-master"
+    },
+    "autoload": {
+    	"psr-4": {"TT\\": ""}
+    },
+    "config": {
+        "secure-http": false
+    },
+    "repositories": [
+        {"type": "composer", "url": "http://packagist.phpcomposer.com"},
+        {"packagist": false}
+    ]
+}
