@@ -1,5 +1,5 @@
 <?php
-namespace TT\web;
+namespace TT\core;
 
 
 use TT\util\HTMLPurifier;
@@ -136,7 +136,7 @@ class Request{
     }
 
     public function runAction($cl){
-
+        
         $route=$this->getRouter();
         $route[0]=ucfirst($route[0]);
         $route[1]=lcfirst($route[1]);

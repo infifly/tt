@@ -1,5 +1,5 @@
 <?php
-namespace TT\web;
+namespace TT\core;
 
 class View{
 

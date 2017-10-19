@@ -1,5 +1,5 @@
 <?php
-namespace TT\web;
+namespace TT\core;
 
 use DebugBar\DataCollector\ExceptionsCollector;
 use DebugBar\StandardDebugBar;

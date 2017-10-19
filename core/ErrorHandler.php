@@ -1,5 +1,5 @@
 <?php
-namespace TT\web;
+namespace TT\core;
 use TT\helpers\Log;
 
 
@@ -16,8 +16,9 @@ class ErrorHandler{
     }
 
     public function handleFatalError(){
-        $e = error_get_last();
-        $this->exceptionHandler($e);
+        $error = error_get_last();
+        $exception = new \ErrorException($error['message'], $error['type'], $error['type'], $error['file'], $error['line']);
+        $this->exceptionHandler($exception);
         //return $this->exceptionHandler($e);
 
         exit(1);
@@ -58,22 +59,12 @@ class ErrorHandler{
         }
         //exit(1);
     }
-    public function object_to_array($obj) {
-        $obj = (array)$obj;
-        foreach ($obj as $k => $v) {
-            if (gettype($v) == 'resource') {
-                return;
-            }
-            if (gettype($v) == 'object' || gettype($v) == 'array') {
-                $obj[$k] = (array)$this->object_to_array($v);
-            }
-        }
-        return $obj;
-    }
+
     public function logError($error){
         $env=\TT::getConfig("env");
 
         $error=$this->parseException($error);
+
         $str="";
         if($env=="prod"){
             $br="\r\n";
@@ -90,7 +81,6 @@ class ErrorHandler{
             }
             $str.= $key . " : " . $tmp . $br;
         }
-
         if($env=="prod"){
             Log::writeLog("error",$str);
         }else{

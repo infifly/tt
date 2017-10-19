@@ -7,7 +7,7 @@
 
 
 use DebugBar\StandardDebugBar;
-use TT\web\ErrorHandler;
+use TT\core\ErrorHandler;
 use TT\helpers\FileUtil;
 
 defined('APP_PATH') or define('APP_PATH', dirname(dirname(dirname(__DIR__))));
@@ -48,15 +48,14 @@ abstract class TT{
      */
     public static function init(){
         $c=[
-            'request'=>"\TT\web\Request",
-            'view'=>"\TT\web\View",
+            'request'=>"\TT\core\Request",
+            'view'=>"\TT\core\View",
         ];
         foreach($c as $k=>$v){
             self::$container[$k]=new $v();
         }
         FileUtil::createDirs(LOG_PATH);
         (new ErrorHandler())->register();
-
         if(self::getConfig("env")!="prod"){
             $debugbar = new StandardDebugBar();
             self::$container['debug']=$debugbar;

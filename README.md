@@ -65,7 +65,7 @@ composer.json 如下
   控制器:<br />
   &lt;?php<br />
   namespace app\controllers;<br />
-  use TT\web\Controller;<br />
+  use TT\core\Controller;<br />
   class TestController extends Controller{</p>
 <p> &nbsp;&nbsp;&nbsp;&nbsp;public function __construct()<br />
   &nbsp;&nbsp;&nbsp;&nbsp;{<br />
