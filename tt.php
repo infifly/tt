@@ -4,7 +4,7 @@
  * Class TT
  * lzw
  */
-namespace TT;
+
 
 use DebugBar\StandardDebugBar;
 use TT\web\ErrorHandler;

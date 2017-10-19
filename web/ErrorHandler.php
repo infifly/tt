@@ -51,18 +51,81 @@ class ErrorHandler{
         restore_exception_handler();
 
         if(PHP_SAPI!="cli"){
-            http_send_status(500);
+            $code=500;
+            $msg="Internal Server Error";
+            header('HTTP/1.1 '.$code.' '.$msg);
+            header('Status:'.$code.' '.$msg);
         }
         //exit(1);
     }
-
-    public function logError($error){
-
-        $env=\TT::getConfig("env");
-        if($env=="prod"){
-            Log::writeLog("",$error);
-        }else{
-            echo $error;
+    public function object_to_array($obj) {
+        $obj = (array)$obj;
+        foreach ($obj as $k => $v) {
+            if (gettype($v) == 'resource') {
+                return;
+            }
+            if (gettype($v) == 'object' || gettype($v) == 'array') {
+                $obj[$k] = (array)$this->object_to_array($v);
+            }
         }
+        return $obj;
+    }
+    public function logError($error){
+        $env=\TT::getConfig("env");
+
+        $error=$this->parseException($error);
+        $str="";
+        if($env=="prod"){
+            $br="\r\n";
+            $str.=$error['message'].$br;
+        }else{
+            $br="<br>";
+            $str.="<font size=\"3\" color=\"red\">".$error['message'].$br."</font>";
+        }
+        foreach($error['files'] as $key=>$value)
+        {
+            $tmp="line: ";
+            foreach($value as $k=>$v){
+                $tmp.=$v." ";
+            }
+            $str.= $key . " : " . $tmp . $br;
+        }
+
+        if($env=="prod"){
+            Log::writeLog("error",$str);
+        }else{
+            echo $str;
+        }
+    }
+    /**
+     * 解析异常信息
+     * @param object $e
+     * @return array
+     */
+    public function parseException($e)
+    {
+        $trace = $e->getTrace();
+        $files = [];$pro=[];$sys = [];
+        $gfile = $e->getFile();
+        if(!empty($gfile)){
+            $files[] = ['file'=>$gfile,'line'=>$e->getLine()];
+        }
+        foreach($trace as $t){
+            if(!empty($t['file'])){
+                $files[] = ['file'=>$t['file'],'line'=>$t['line']];
+            }
+        }
+        foreach ($files as $t){
+            if(!empty($t['file'])){
+                $file = $t['file']; unset($t['file']);
+                if(strpos($file,H2O_PATH) !== false){
+                    $sys[$file][] = $t['line'];
+                }else{
+                    $pro[$file][] = $t['line'];
+                }
+            }
+        }
+        $files = array_merge($pro,$sys);
+        return ['message'=>$e->getMessage(),'files'=>$files];
     }
 }

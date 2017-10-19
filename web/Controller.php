@@ -33,7 +33,11 @@ abstract class Controller{
     public function getContent(){
         return $this->content;
     }
-
+    public function checkTpl($file){
+        if(!file_exists($file) || !is_file($file)){
+            throw new \Exception("tpl not found:".$file);
+        }
+    }
 
     /**
      * 渲染模板
@@ -42,7 +46,9 @@ abstract class Controller{
      */
     public function render($tpl,$params=[]){
         $view=\TT::getContainer("view");
-        $view->setTpl($this->getViewPath()."/".$tpl.".php");
+        $file=$this->getViewPath()."/".$tpl.".php";
+        $view->setTpl($file);
+        $this->checkTpl($file);
         $view->setContent($this->getContent());
         $content=$view->render($params);
         if($this->content!=""||$this->layout==""){
@@ -61,6 +67,6 @@ abstract class Controller{
     public function getViewPath(){
         //controller
         $reflector = new \ReflectionClass($this);
-        return  dirname($reflector->getFileName())."/".'views'."/".strtolower(substr($reflector->getShortName(),0,-10));
+        return  dirname(dirname($reflector->getFileName()))."/".'views'."/".strtolower(substr($reflector->getShortName(),0,-10));
     }
 }
