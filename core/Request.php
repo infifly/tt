@@ -2,7 +2,7 @@
 namespace TT\core;
 
 
-use TT\util\HTMLPurifier;
+use TT\helpers\HTMLPurifier;
 
 class Request{
 
@@ -136,7 +136,7 @@ class Request{
     }
 
     public function runAction($cl){
-        
+
         $route=$this->getRouter();
         $route[0]=ucfirst($route[0]);
         $route[1]=lcfirst($route[1]);

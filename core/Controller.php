@@ -18,6 +18,14 @@ abstract class Controller{
         }
     }
 
+    /**
+     * @return Request|mixed
+     */
+    public function request()
+    {
+        return \TT::getContainer('request');
+    }
+
     public function clearLayout(){
         $this->layout="";
     }

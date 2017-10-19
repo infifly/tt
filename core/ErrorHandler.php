@@ -16,7 +16,12 @@ class ErrorHandler{
     }
 
     public function handleFatalError(){
+
         $error = error_get_last();
+        //处理错误范围
+        if(!in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING])){
+            return;
+        }
         $exception = new \ErrorException($error['message'], $error['type'], $error['type'], $error['file'], $error['line']);
         $this->exceptionHandler($exception);
         //return $this->exceptionHandler($e);
@@ -95,7 +100,7 @@ class ErrorHandler{
     public function parseException($e)
     {
         $trace = $e->getTrace();
-        $files = [];$pro=[];$sys = [];
+        $files = [];$pro=[];
         $gfile = $e->getFile();
         if(!empty($gfile)){
             $files[] = ['file'=>$gfile,'line'=>$e->getLine()];
@@ -107,15 +112,11 @@ class ErrorHandler{
         }
         foreach ($files as $t){
             if(!empty($t['file'])){
-                $file = $t['file']; unset($t['file']);
-                if(strpos($file,H2O_PATH) !== false){
-                    $sys[$file][] = $t['line'];
-                }else{
-                    $pro[$file][] = $t['line'];
-                }
+                $file = $t['file'];
+                unset($t['file']);
+                $pro[$file][] = $t['line'];
             }
         }
-        $files = array_merge($pro,$sys);
-        return ['message'=>$e->getMessage(),'files'=>$files];
+        return ['message'=>$e->getMessage(),'files'=>$pro];
     }
 }

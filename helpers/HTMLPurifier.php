@@ -5,7 +5,7 @@
  * Time: 9:18
  * 防止xss 攻击
  */
-namespace TT\util;
+namespace TT\helpers;
 class HTMLPurifier{
 
     public static function filter($str)
