@@ -11,7 +11,7 @@
     "require": {
     	"php": ">=5.4.0",
         "maximebf/debugbar":"*",
-        "joshcam/mysqli-database-class":"dev-master",
+        "joshcam/mysqli-database-class":"v2.*",
         "ezyang/htmlpurifier": "4.6.*"
     },
     "autoload": {
